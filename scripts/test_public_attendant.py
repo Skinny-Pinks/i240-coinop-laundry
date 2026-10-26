@@ -66,5 +66,58 @@ class AttendanceProjectionTest(unittest.TestCase):
         self.assertEqual(result["attendants"], ["Melvin"])
 
 
+    def test_early_pm_clock_in_preempts_open_am(self):
+        data = fixture()
+        data["data"]["I240"]["Schedule"][1]["ActualWorkers"] = [{
+            "EmployeeName": "MELVIN LEWIS",
+            "ClockInTime": "1:42 PM",
+            "IsOpen": True,
+            "EndSource": "",
+        }]
+        result = project_attendance(data, now_at(13, 54))
+        self.assertEqual(result["status"], "on_duty")
+        self.assertEqual(result["attendants"], ["Melvin"])
+
+    def test_future_pm_not_eligible_before_early_window(self):
+        data = fixture()
+        data["data"]["I240"]["Schedule"][1]["ActualWorkers"] = [{
+            "EmployeeName": "MELVIN LEWIS",
+            "ClockInTime": "12:32 PM",
+            "IsOpen": True,
+            "EndSource": "",
+        }]
+        self.assertEqual(
+            project_attendance(data, now_at(12, 33))["attendants"],
+            ["John-Paul"],
+        )
+
+    def test_pm_shift_becomes_current_at_two(self):
+        data = fixture()
+        data["data"]["I240"]["Schedule"][1]["ActualWorkers"] = [{
+            "EmployeeName": "MELVIN LEWIS",
+            "ClockInTime": "1:42 PM",
+            "IsOpen": True,
+            "EndSource": "",
+        }]
+        self.assertEqual(
+            project_attendance(data, now_at(14, 5))["attendants"],
+            ["Melvin"],
+        )
+
+    def test_future_clockin_time_is_not_accepted(self):
+        data = fixture()
+        data["data"]["I240"]["Schedule"][1]["ActualWorkers"] = [{
+            "EmployeeName": "MELVIN LEWIS",
+            "ClockInTime": "2:03 PM",
+            "IsOpen": True,
+            "EndSource": "",
+        }]
+        self.assertEqual(
+            project_attendance(data, now_at(13, 54))["attendants"],
+            ["John-Paul"],
+        )
+
+
+
 if __name__ == "__main__":
     unittest.main()

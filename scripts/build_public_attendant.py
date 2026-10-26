@@ -65,7 +65,9 @@ def project_attendance(payload, now):
         return result
 
     today = local_now.date().isoformat()
-    current = []
+    now_time = local_now.time().replace(tzinfo=None)
+    candidates = []
+    scheduled_shift_found = False
     for row in rows:
         if not isinstance(row, dict) or row.get("Date") != today:
             continue
@@ -73,39 +75,61 @@ def project_attendance(payload, now):
         end = time_value(row.get("EndTime"))
         if start is None or end is None or start >= end:
             continue
-        if start <= local_now.time() < end:
-            current.append(row)
 
-    if len(current) != 1:
-        return result
-    workers = current[0].get("ActualWorkers")
-    if not isinstance(workers, list):
-        return result
+        in_shift = start <= now_time < end
+        # Employees can clock into the next shift before its scheduled start.
+        # Consider only shifts within 45 minutes of opening, not arbitrary
+        # future assignments; never substitute the scheduled person's name.
+        early_shift = (
+            now_time < start
+            and (datetime.combine(local_now.date(), start) -
+                 local_now.replace(tzinfo=None)).total_seconds() <= 45 * 60
+        )
+        if not (in_shift or early_shift):
+            continue
+        if in_shift:
+            scheduled_shift_found = True
 
-    seen = set()
-    names = []
-    for worker in workers:
-        if not isinstance(worker, dict):
+        workers = row.get("ActualWorkers")
+        if not isinstance(workers, list):
             continue
-        # For open rows, ClockOutTime may be a running-hours placeholder.
-        # IsOpen and EndSource are the indicators of an actual close-out.
-        if worker.get("IsOpen") is not True or str(worker.get("EndSource") or "").strip():
-            continue
-        if not time_value(worker.get("ClockInTime")):
-            continue
-        name = public_first_name(worker.get("EmployeeName"))
-        if name and name.lower() not in seen:
-            names.append(name)
-            seen.add(name.lower())
+        names = []
+        seen = set()
+        for worker in workers:
+            if not isinstance(worker, dict):
+                continue
+            # ClockOutTime can reflect elapsed-time projection while IsOpen
+            # remains true; use IsOpen and EndSource for confirmed closure.
+            if worker.get("IsOpen") is not True or str(worker.get("EndSource") or "").strip():
+                continue
+            clock_in = time_value(worker.get("ClockInTime"))
+            if clock_in is None or clock_in > now_time:
+                continue
+            name = public_first_name(worker.get("EmployeeName"))
+            if name and name.lower() not in seen:
+                names.append(name)
+                seen.add(name.lower())
+        if names:
+            candidates.append((start, names))
 
-    if names:
+    if candidates:
+        # If outgoing and incoming workers overlap, the more recently
+        # scheduled shift takes priority once someone has clocked into it.
+        latest_start = max(start for start, _names in candidates)
+        names = []
+        seen = set()
+        for start, shift_names in candidates:
+            if start != latest_start:
+                continue
+            for name in shift_names:
+                if name.lower() not in seen:
+                    names.append(name)
+                    seen.add(name.lower())
         result["status"] = "on_duty"
         result["attendants"] = names[:6]
-    else:
-        # Do NOT substitute DefaultEmployee when a clock-in is unconfirmed.
+    elif scheduled_shift_found:
         result["status"] = "not_confirmed"
     return result
-
 
 def fetch_attendance(now):
     local_date = now.astimezone(STORE_TZ).date().isoformat()
