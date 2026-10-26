@@ -133,3 +133,11 @@ starter with a durable, sanitized portal endpoint for longer-term operation.
    It must contain **only** `version`, `store`, `status`, `attendants`, and
    `checkedAt`. Actual names appear only when clock-in is confirmed.
 
+
+
+## Publishing source switch verification
+
+On October 26, 2026, the owner confirmed GitHub Pages **Source: GitHub Actions**.
+This commit is a controlled new publish trigger so that the custom `Refresh I-240 customer website`
+workflow, instead of the former branch-based Pages builder, publishes the public
+`data/attendant.json` file. Verify the actual public endpoint after deployment.
