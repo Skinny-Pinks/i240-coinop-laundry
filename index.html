@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="assets/styles.css">
   <script src="site-config.js" defer></script>
   <script src="assets/site.js" defer></script>
+  <script src="assets/attendant.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -26,6 +27,7 @@
       </a>
       <nav class="nav-links" aria-label="Main navigation">
         <a href="#washers">Our washers</a>
+        <a href="#attendant">Who's on duty</a>
         <a href="#free-dry">Free drying</a>
         <a href="#hours">Hours &amp; location</a>
       </nav>
@@ -75,6 +77,25 @@
         <div><span class="benefit-symbol" aria-hidden="true">↗</span> EASY-TO-SEE PRICING</div>
       </div>
     </div>
+
+    <section id="attendant" class="attendant-section" aria-labelledby="attendant-title">
+      <div class="container attendant-layout">
+        <div class="attendant-intro">
+          <span class="eyebrow eyebrow-dark">FRIENDLY HELP IS HERE</span>
+          <h2 id="attendant-title">Who's on duty <em>today?</em></h2>
+          <p>See which I-240 attendant is checked in and ready to help with your laundry.</p>
+        </div>
+        <div class="attendant-card">
+          <div class="attendant-avatar" aria-hidden="true">✦</div>
+          <div class="attendant-details" aria-live="polite" aria-atomic="true">
+            <span class="attendant-state" id="attendant-state">Checking attendant status</span>
+            <h3 id="attendant-name">Checking now…</h3>
+            <p id="attendant-message">We'll show your attendant when today's check-in is confirmed.</p>
+            <span class="attendant-updated" id="attendant-updated"></span>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section id="washers" class="section washer-section" aria-labelledby="washers-title">
       <div class="container">
