@@ -182,3 +182,21 @@ h2 em{font-style:normal;color:#159e91}
 .store-contact a{font-size:19px;font-weight:900;color:#056f91;white-space:nowrap;text-decoration:none}
 .store-contact a:hover{text-decoration:underline}
 @media(max-width:380px){.store-contact{flex-wrap:wrap;gap:4px}.store-contact a{font-size:18px}}
+
+/* Customer-only attendant feature. No employee schedules or payroll exposed. */
+.attendant-section{padding:64px 0;background:linear-gradient(135deg,#eaf7f0,#f7fbf8);border-bottom:1px solid #dcebe3}
+.attendant-layout{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);align-items:center;gap:42px}
+.attendant-intro h2{margin:13px 0 16px;font-size:clamp(34px,3.5vw,48px)}
+.attendant-intro p{color:#59737a;font-size:15px;line-height:1.65;max-width:415px;margin:0}
+.attendant-card{min-width:0;display:flex;align-items:center;gap:22px;background:#fff;border:1px solid #c9e7df;border-radius:24px;padding:28px;box-shadow:0 18px 45px rgba(12,73,70,.07)}
+.attendant-avatar{flex:none;width:86px;height:86px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(140deg,#b0ebd8,#20a99c);border:6px solid #e4f6ee;color:#fff;font-size:35px;font-weight:900}
+.attendant-details{min-width:0;flex:1}
+.attendant-state{display:inline-flex;gap:8px;align-items:center;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:850;color:#537179}
+.attendant-state.is-live{color:#067969}
+.attendant-state.is-live:before{content:"";width:8px;height:8px;border-radius:50%;background:#17b290;box-shadow:0 0 0 4px #e3f7ef}
+.attendant-details h3{margin:6px 0;font-size:clamp(22px,2.6vw,34px);letter-spacing:-.045em;line-height:1.16;font-weight:900;overflow-wrap:anywhere}
+.attendant-details p{margin:0;color:#527078;font-size:13px;line-height:1.5}
+.attendant-updated{display:block;min-height:16px;margin-top:9px;font-size:11px;color:#798d91}
+@media(max-width:900px){.attendant-layout{gap:24px}.attendant-card{padding:22px;gap:15px}.attendant-avatar{width:70px;height:70px;font-size:29px}}
+@media(max-width:760px){.attendant-section{padding:44px 0}.attendant-layout{grid-template-columns:1fr;gap:22px}.attendant-intro p{font-size:14px}.attendant-card{border-radius:20px;padding:22px 18px}.attendant-avatar{width:65px;height:65px;min-width:65px;font-size:26px}.attendant-details h3{font-size:24px}}
+@media(max-width:370px){.attendant-card{gap:12px}.attendant-avatar{width:53px;height:53px;min-width:53px;font-size:21px;border-width:4px}.attendant-details h3{font-size:21px}}
