@@ -82,7 +82,7 @@ The future API/export should contain only owner-approved fields, for example:
 
 **Those quantities are illustrative placeholders only and are not connected to your machines.** Real-time availability cannot be inferred from the number of machines or from employee schedules. It needs reliable live machine telemetry or a clearly labeled manual update process. Never show example values as real counts.
 
-The site config reserves `publicMachineStatusUrl` for a later, approved integration, but there is deliberately **no live availability claim or direct employee-site integration** in this starter.
+The site config reserves `publicMachineStatusUrl` for a later, approved integration, but there is deliberately **no live machine-availability claim**. Attendant status uses a separate sanitized publication step; it does not mean washers or dryers are live-connected.
 
 ## What to avoid
 
@@ -99,4 +99,37 @@ The site config reserves `publicMachineStatusUrl` for a later, approved integrat
 - `site-config.js`: owner-editable public business information
 - `assets/favicon.svg`: simple vector icon
 
-© I-240 Coin-Op Laundry. Built as a starter, not deployed.
+© I-240 Coin-Op Laundry. Public customer site hosted on GitHub Pages.
+
+## Who's on duty — sanitized customer feed
+
+This project includes a customer-facing attendant card and a scheduled GitHub Actions
+publisher. **Activate it by changing GitHub Settings → Pages → Source from
+"Deploy from a branch" to "GitHub Actions".** The feature is not verified
+live until the first Pages workflow run deploys successfully.
+
+- `scripts/build_public_attendant.py` reads the existing CoinOp scheduling API **in the GitHub runner**, not in visitors' browsers.
+- Only the store key, status, approved first-name display, and time checked are written to `dist/data/attendant.json`.
+- The exporter requires a worker in the current I-240 shift with `IsOpen: true`, a valid clock-in, and a blank `EndSource`. The API's `ClockOutTime` can be a moving elapsed-hours placeholder and is **not** proof of clock-out.
+- A scheduled person is never labeled on duty solely because of `DefaultEmployee`.
+- The browser reads only the sanitized file and switches to a neutral message when it is older than 30 minutes or unavailable.
+- The workflow schedules refreshes about every 10 minutes, but GitHub Actions is not guaranteed to run precisely on schedule. Pages may take additional time to update.
+- Offline tests cover confirmed, unconfirmed, closed, unavailable, and first-name-only cases.
+
+The source API must be reachable from GitHub-hosted runners. If it becomes
+authentication-protected, replace the anonymous source with a dedicated
+read-only integration; never put portal credentials in `site-config.js` or public JS.
+GitHub may disable recurring workflows in inactive public repositories after
+60 days without repository activity; check workflow status or replace this
+starter with a durable, sanitized portal endpoint for longer-term operation.
+
+### Activation and verification
+
+1. Open `https://github.com/Skinny-Pinks/i240-coinop-laundry/settings/pages`.
+2. In **Build and deployment**, select **GitHub Actions** as Source.
+3. Open **Actions → Refresh I-240 customer website**, run the workflow,
+   and inspect its result. On failure, do not switch to publishing payroll data.
+4. Check `https://skinny-pinks.github.io/i240-coinop-laundry/data/attendant.json`.
+   It must contain **only** `version`, `store`, `status`, `attendants`, and
+   `checkedAt`. Actual names appear only when clock-in is confirmed.
+
