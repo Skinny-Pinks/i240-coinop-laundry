@@ -1,0 +1,45 @@
+name: Refresh I-240 customer website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Six refreshes an hour, away from the top-of-hour traffic spike.
+    - cron: '7,17,27,37,47,57 * * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: i240-customer-pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout customer website
+        uses: actions/checkout@v4
+      - name: Check safe attendant projection
+        run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
+      - name: Assemble static site with fresh public status
+        run: |
+          mkdir -p dist
+          cp index.html site-config.js robots.txt .nojekyll dist/
+          cp -R assets dist/assets
+          python3 scripts/build_public_attendant.py dist/data/attendant.json
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+      - name: Publish customer website
+        id: deployment
+        uses: actions/deploy-pages@v4
