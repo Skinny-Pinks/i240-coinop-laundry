@@ -200,3 +200,45 @@ h2 em{font-style:normal;color:#159e91}
 @media(max-width:900px){.attendant-layout{gap:24px}.attendant-card{padding:22px;gap:15px}.attendant-avatar{width:70px;height:70px;font-size:29px}}
 @media(max-width:760px){.attendant-section{padding:44px 0}.attendant-layout{grid-template-columns:1fr;gap:22px}.attendant-intro p{font-size:14px}.attendant-card{border-radius:20px;padding:22px 18px}.attendant-avatar{width:65px;height:65px;min-width:65px;font-size:26px}.attendant-details h3{font-size:24px}}
 @media(max-width:370px){.attendant-card{gap:12px}.attendant-avatar{width:53px;height:53px;min-width:53px;font-size:21px;border-width:4px}.attendant-details h3{font-size:21px}}
+
+
+/* I-240 arrival status masthead V2 — the most prominent customer information. */
+.arrival-section{padding:38px 0 45px;background:radial-gradient(circle at 10% 4%,rgba(31,167,150,.20),transparent 53%),linear-gradient(125deg,#082f3c 0%,#0f5054 100%);color:#f7fffb}
+.arrival-shell{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:clamp(24px,4vw,60px);align-items:center}
+.arrival-primary,.arrival-schedule{min-width:0}
+.arrival-kicker{display:inline-flex;align-items:center;gap:9px;letter-spacing:.16em;font-size:11px;font-weight:900;color:#a5e8da}
+.arrival-kicker-dot{height:8px;width:8px;border-radius:50%;background:#6ce0bb;box-shadow:0 0 0 4px rgba(98,224,184,.14)}
+.arrival-title{font-size:clamp(30px,3.5vw,45px);letter-spacing:-.065em;line-height:1.1;margin:12px 0 18px;color:#f6fffb}
+.arrival-title em{font-style:normal;color:#79e5c7}
+.arrival-state{display:inline-flex;gap:8px;align-items:center;min-height:27px;border-radius:99px;border:1px solid rgba(216,248,239,.34);background:rgba(255,255,255,.10);color:#dbf2e9;padding:5px 12px;font-size:11px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
+.arrival-state.is-live{background:#c0f7dd;border-color:#c0f7dd;color:#095847}
+.arrival-state.is-live:before{content:"";height:7px;width:7px;border-radius:50%;background:#0b9b66}
+.arrival-state.is-warning{background:#fff0cf;border-color:#fae2ad;color:#8a4f1d}
+.arrival-name{color:white;font-size:clamp(36px,5.6vw,69px);font-weight:900;line-height:1.06;letter-spacing:-.073em;margin:12px 0}
+.arrival-message{color:#d7eae7;font-size:16px;line-height:1.62;margin:0 0 10px;max-width:620px}
+.arrival-clockin{font-size:18px;color:#d9fff0;font-weight:850;margin:16px 0}
+.arrival-opening{display:flex;gap:8px;align-items:center;width:fit-content;max-width:100%;margin:18px 0 16px;padding:11px 15px;background:rgba(221,252,243,.12);border:1px solid rgba(193,249,227,.25);border-radius:12px;color:#d1fbec;font-size:13px;font-weight:750}
+.arrival-buttons{display:flex;gap:11px;flex-wrap:wrap;margin:17px 0 0}
+.arrival-call{background:#ffca60;color:#1b3540}
+.arrival-call:hover{background:#f5b940}
+.arrival-directions{border:1px solid rgba(255,255,255,.55);color:#fff;background:transparent}
+.arrival-directions:hover{background:rgba(255,255,255,.10)}
+.arrival-updated{min-height:17px;color:#afdbd1;font-size:12px;margin:13px 0 0}
+.arrival-caveat{font-size:11px;line-height:1.5;max-width:610px;color:#b9d8d4;margin:7px 0 0}
+.arrival-schedule{color:#123a42;background:#fff;border-radius:23px;padding:27px 28px;box-shadow:0 24px 70px rgba(1,30,37,.20)}
+.arrival-schedule-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.arrival-side-eyebrow{display:block;color:#088574;letter-spacing:.15em;font-size:10px;font-weight:900;margin-bottom:4px}
+.arrival-schedule-heading h3{font-size:22px;letter-spacing:-.05em;margin:0;font-weight:900}
+.arrival-calendar{font-size:28px;color:#0c9c8b}
+.arrival-shift{border:1px solid #e0ece6;border-radius:15px;padding:15px 16px;margin-top:11px}
+.arrival-shift.is-current{border-color:#49c6a4;background:#ecfbf4;box-shadow:inset 4px 0 0 #17ab83}
+.arrival-shift-header{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:12px;color:#4e6870}
+.arrival-shift-header strong{color:#0e5963;font-size:12px;white-space:nowrap}
+.arrival-shift-header span{text-align:right}
+.arrival-shift-name{font-weight:900;font-size:23px;letter-spacing:-.05em;line-height:1.22;margin:10px 0 4px}
+.arrival-shift-status{margin:0;color:#55737a;font-size:12px;font-weight:650;line-height:1.45}
+.arrival-shift.is-current .arrival-shift-status{color:#08785d}
+.arrival-schedule-note{margin:16px 0 0;font-size:11px;color:#698187;line-height:1.55}
+@media(max-width:950px){.arrival-shell{grid-template-columns:minmax(0,1fr) minmax(310px,.95fr);gap:25px}.arrival-name{font-size:clamp(36px,4.7vw,52px)}.arrival-schedule{padding:22px}.arrival-shift-header{flex-wrap:wrap;gap:4px}.arrival-shift-header span{text-align:left}}
+@media(max-width:760px){.arrival-section{padding:30px 0 34px}.arrival-shell{grid-template-columns:1fr;gap:24px}.arrival-title{font-size:34px}.arrival-name{font-size:clamp(37px,8.7vw,58px)}.arrival-message{font-size:15px}.arrival-schedule{border-radius:18px;padding:23px}.arrival-shift-header{flex-wrap:nowrap}.arrival-shift-header span{text-align:right}.arrival-kicker{font-size:10px}}
+@media(max-width:370px){.arrival-schedule{padding:17px}.arrival-shift{padding:13px 11px}.arrival-shift-header{flex-wrap:wrap}.arrival-buttons .btn{font-size:12px;padding:10px 15px;min-height:44px}}

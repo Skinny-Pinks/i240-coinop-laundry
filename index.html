@@ -36,7 +36,48 @@
   </header>
 
   <main id="main">
-    <section id="top" class="hero" aria-labelledby="hero-title">
+    <div id="top" aria-hidden="true"></div>
+    <section id="attendant" class="arrival-section" aria-labelledby="attendant-title">
+      <div class="container arrival-shell">
+        <div class="arrival-primary">
+          <span class="arrival-kicker"><span class="arrival-kicker-dot" aria-hidden="true"></span> I-240 · TODAY'S ATTENDANT STATUS</span>
+          <h2 id="attendant-title" class="arrival-title">Who's here <em>right now?</em></h2>
+          <span id="attendant-state" class="arrival-state" role="status">Checking attendance</span>
+          <h3 id="attendant-name" class="arrival-name">Checking today's check-ins…</h3>
+          <p id="attendant-message" class="arrival-message">We verify the register's recorded check-ins, not just the employee schedule.</p>
+          <p id="attendant-clockin" class="arrival-clockin" hidden></p>
+          <div id="opening-status" class="arrival-opening" role="status">Checking morning register start…</div>
+          <div class="arrival-buttons">
+            <a class="btn arrival-call" href="tel:+14056310466">Call the store <span aria-hidden="true">↗</span></a>
+            <a class="btn arrival-directions" href="https://maps.app.goo.gl/kz5DJzgJ6n3pVNNr9" target="_blank" rel="noopener noreferrer">Get directions <span aria-hidden="true">↗</span></a>
+          </div>
+          <p id="attendant-updated" class="arrival-updated" aria-live="polite"></p>
+          <p class="arrival-caveat">Register check-in confirms a recorded employee start. It does not independently verify that the entrance is unlocked.</p>
+        </div>
+        <aside class="arrival-schedule" aria-labelledby="arrival-schedule-title">
+          <div class="arrival-schedule-heading">
+            <div>
+              <span class="arrival-side-eyebrow">TODAY'S COVERAGE</span>
+              <h3 id="arrival-schedule-title">Meet your attendants</h3>
+            </div>
+            <span class="arrival-calendar" aria-hidden="true">◷</span>
+          </div>
+          <div class="arrival-shift" id="shift-am">
+            <div class="arrival-shift-header"><strong>Morning · AM</strong><span id="shift-am-hours">8:00 AM – 2:00 PM</span></div>
+            <div class="arrival-shift-name" id="shift-am-name">Schedule loading…</div>
+            <p class="arrival-shift-status" id="shift-am-status">Check-in not yet verified</p>
+          </div>
+          <div class="arrival-shift" id="shift-pm">
+            <div class="arrival-shift-header"><strong>Afternoon · PM</strong><span id="shift-pm-hours">2:00 PM – 9:00 PM</span></div>
+            <div class="arrival-shift-name" id="shift-pm-name">Schedule loading…</div>
+            <p class="arrival-shift-status" id="shift-pm-status">Check-in not yet verified</p>
+          </div>
+          <p class="arrival-schedule-note">Scheduled hours are not a confirmation that an employee has arrived. Recorded check-ins and clock-outs are shown when verified.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="welcome" class="hero" aria-labelledby="hero-title">
       <div class="container hero-grid">
         <div class="hero-copy">
           <span class="eyebrow"><span class="eyebrow-dot"></span> YOUR NEIGHBORHOOD LAUNDROMAT • OKLAHOMA CITY</span>
@@ -77,25 +118,6 @@
         <div><span class="benefit-symbol" aria-hidden="true">↗</span> EASY-TO-SEE PRICING</div>
       </div>
     </div>
-
-    <section id="attendant" class="attendant-section" aria-labelledby="attendant-title">
-      <div class="container attendant-layout">
-        <div class="attendant-intro">
-          <span class="eyebrow eyebrow-dark">FRIENDLY HELP IS HERE</span>
-          <h2 id="attendant-title">Who's on duty <em>today?</em></h2>
-          <p>See which I-240 attendant is checked in and ready to help with your laundry.</p>
-        </div>
-        <div class="attendant-card">
-          <div class="attendant-avatar" aria-hidden="true">✦</div>
-          <div class="attendant-details" aria-live="polite" aria-atomic="true">
-            <span class="attendant-state" id="attendant-state">Checking attendant status</span>
-            <h3 id="attendant-name">Checking now…</h3>
-            <p id="attendant-message">We'll show your attendant when today's check-in is confirmed.</p>
-            <span class="attendant-updated" id="attendant-updated"></span>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <section id="washers" class="section washer-section" aria-labelledby="washers-title">
       <div class="container">
