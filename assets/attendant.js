@@ -101,11 +101,18 @@
       nameEl.textContent = name || "Attendant not listed";
       const start = safeTime(row.start), end = safeTime(row.end);
       if (start && end) timeEl.textContent = start + " – " + end;
-      const actualStart = safeTime(row.actualStart);
-      const departure = safeTime(row.confirmedDeparture);
-      if (row.attendance === "checked_in") {
+      const currentWorkers = Array.isArray(status.current?.attendants) ? status.current.attendants : [];
+      const worker = currentWorkers.find(item => item?.shift === shiftName);
+      const actualStart = safeTime(row.actualStart) ||
+        (row.attendance === "checked_in" ? safeTime(worker?.recordedStart) : null) ||
+        (shiftName === "AM" ? safeTime(status.opening?.recordedAt) : null);
+      const departure = safeTime(row.confirmedDeparture) ||
+        (status.lastDeparture?.shift === shiftName ? safeTime(status.lastDeparture.recordedAt) : null);
+      if (row.attendance === "checked_in" && status.status === "on_duty") {
         rowEl.classList.add("is-current");
         statusEl.textContent = actualStart ? "Clock-in recorded: " + actualStart : "Check-in confirmed";
+      } else if (row.attendance === "checked_in") {
+        statusEl.textContent = "Register record remains open; currently outside posted hours";
       } else if (row.attendance === "previously_checked_in") {
         statusEl.textContent = departure ? "Clocked out at " + departure :
           "Previously checked in; no active clock-in";
