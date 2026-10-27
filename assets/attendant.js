@@ -165,8 +165,15 @@
       }
     } else if (data.status === "outside_hours") {
       setState("Outside posted business hours", "warning");
-      setMain("See you tomorrow!",
-        "Our posted hours are 8:00 AM–9:00 PM daily. Check back for tomorrow's attendant.", null);
+      const lastName = safeName(data.lastDeparture?.name);
+      const departure = safeTime(data.lastDeparture?.recordedAt);
+      if (lastName && departure) {
+        setMain(lastName + " clocked out at " + departure,
+          "The store's posted hours have ended. We open at 8:00 AM tomorrow.", null);
+      } else {
+        setMain("See you tomorrow!",
+          "Our posted hours are 8:00 AM–9:00 PM daily. Check back for tomorrow's attendant.", null);
+      }
     } else {
       neutral("We couldn't confirm a current check-in. Please call before traveling.");
     }
