@@ -108,11 +108,14 @@
         (shiftName === "AM" ? safeTime(status.opening?.recordedAt) : null);
       const departure = safeTime(row.confirmedDeparture) ||
         (status.lastDeparture?.shift === shiftName ? safeTime(status.lastDeparture.recordedAt) : null);
-      if (row.attendance === "checked_in" && status.status === "on_duty") {
+      const isCurrentShift = currentWorkers.some(item => item?.shift === shiftName);
+      if (row.attendance === "checked_in" && status.status === "on_duty" && isCurrentShift) {
         rowEl.classList.add("is-current");
         statusEl.textContent = actualStart ? "Clock-in recorded: " + actualStart : "Check-in confirmed";
       } else if (row.attendance === "checked_in") {
-        statusEl.textContent = "Register record remains open; currently outside posted hours";
+        statusEl.textContent = status.status === "outside_hours" ?
+          "Register record still open; outside posted hours" :
+          "Register record still open; another shift is currently serving customers";
       } else if (row.attendance === "previously_checked_in") {
         statusEl.textContent = departure ? "Clocked out at " + departure :
           "Previously checked in; no active clock-in";
