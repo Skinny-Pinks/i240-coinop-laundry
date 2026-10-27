@@ -39,5 +39,9 @@ window.COINOP_SITE = {
   ],
   freeDryingWhenYouWashHere: true,
   // Reserved for Phase 2: a PUBLIC, sanitized data feed — NOT the private employee website URL.
-  publicMachineStatusUrl: ""
+  publicMachineStatusUrl: "",
+  // Dedicated, sanitized attendant status URL (HTTPS only, not the employee portal).
+  // Intentionally blank until the separate customer-only service and Cloudflare
+  // hostname are confirmed working. Do not enter the employee /api/schedule URL.
+  publicAttendantStatusUrl: ""
 };
