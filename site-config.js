@@ -41,7 +41,7 @@ window.COINOP_SITE = {
   // Reserved for Phase 2: a PUBLIC, sanitized data feed — NOT the private employee website URL.
   publicMachineStatusUrl: "",
   // Dedicated, sanitized attendant status URL (HTTPS only, not the employee portal).
-  // Intentionally blank until the separate customer-only service and Cloudflare
-  // hostname are confirmed working. Do not enter the employee /api/schedule URL.
-  publicAttendantStatusUrl: ""
+  // Verified independent customer-only HTTPS status service.
+  // This is NOT the private employee portal or the full schedule API.
+  publicAttendantStatusUrl: "https://i240status.mccrarytechnology.com/v1/i240/attendant"
 };
