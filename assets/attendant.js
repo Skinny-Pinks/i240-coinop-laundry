@@ -161,13 +161,28 @@
     const start = safeTime(currentShift?.start), end = safeTime(currentShift?.end);
     const scheduled = start && end ? " Scheduled " + shift + " shift: " + start + "–" + end + "." : "";
 
-    if (data.status === "on_duty" && names.length) {
+    // Store opening is a daily event, NOT a shift-attendance state. A confirmed
+    // AM register opening remains valid during the PM handoff, even if neither
+    // employee currently has an active row. Only an explicitly current, safe
+    // customer projection may establish this claim; source outages fail closed.
+    const openingConfirmed = data.opening?.status === "register_checkin_recorded" &&
+      Boolean(safeTime(data.opening.recordedAt));
+    const attendantConfirmed = data.status === "on_duty" && names.length > 0;
+    const storeOpen = data.status !== "outside_hours" && data.status !== "unavailable" &&
+      (openingConfirmed || attendantConfirmed);
+
+    if (storeOpen) {
       setState("OPEN FOR LAUNDRY", "live");
-      setMain(
-        names.length === 1 ? names[0] + " is here!" : names.join(" & ") + " are here!",
-        "Come on in! An attendant is on duty and ready to help with your laundry." + scheduled,
-        clockIn ? (names.length === 1 ? names[0] + " checked in at " : "First recorded check-in: ") + clockIn : null
-      );
+      if (attendantConfirmed) {
+        setMain(
+          names.length === 1 ? names[0] + " is here!" : names.join(" & ") + " are here!",
+          "Come on in! An attendant is on duty and ready to help with your laundry." + scheduled,
+          clockIn ? (names.length === 1 ? names[0] + " checked in at " : "First recorded check-in: ") + clockIn : null
+        );
+      } else {
+        setMain("Today's opening confirmed",
+          "The store opened this morning. Attendant details update as shifts change; call the store if you need assistance.", null);
+      }
     } else if (data.status === "not_confirmed") {
       setState("OPENING NOT CONFIRMED", "warning");
       const last = data.lastDeparture;
