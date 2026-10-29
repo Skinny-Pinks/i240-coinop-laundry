@@ -242,3 +242,14 @@ h2 em{font-style:normal;color:#159e91}
 @media(max-width:950px){.arrival-shell{grid-template-columns:minmax(0,1fr) minmax(310px,.95fr);gap:25px}.arrival-name{font-size:clamp(36px,4.7vw,52px)}.arrival-schedule{padding:22px}.arrival-shift-header{flex-wrap:wrap;gap:4px}.arrival-shift-header span{text-align:left}}
 @media(max-width:760px){.arrival-section{padding:30px 0 34px}.arrival-shell{grid-template-columns:1fr;gap:24px}.arrival-title{font-size:34px}.arrival-name{font-size:clamp(37px,8.7vw,58px)}.arrival-message{font-size:15px}.arrival-schedule{border-radius:18px;padding:23px}.arrival-shift-header{flex-wrap:nowrap}.arrival-shift-header span{text-align:right}.arrival-kicker{font-size:10px}}
 @media(max-width:370px){.arrival-schedule{padding:17px}.arrival-shift{padding:13px 11px}.arrival-shift-header{flex-wrap:wrap}.arrival-buttons .btn{font-size:12px;padding:10px 15px;min-height:44px}}
+
+/* I-240 public opening indicator V3 — a store status, not merely an attendance badge. */
+.arrival-title{font-size:clamp(24px,2.8vw,36px);margin:13px 0 17px;letter-spacing:-.052em}
+.arrival-state{display:inline-flex;align-items:center;justify-content:flex-start;gap:13px;min-height:68px;max-width:100%;padding:14px 22px;border-radius:17px;font-size:clamp(21px,2.45vw,32px);font-weight:950;letter-spacing:-.03em;line-height:1.12;text-transform:uppercase;box-shadow:0 14px 30px rgba(0,20,30,.16)}
+.arrival-state.is-live{background:#baf3d9;border-color:#d7ffed;color:#07513d}
+.arrival-state.is-live:before{width:15px;height:15px;min-width:15px;box-shadow:0 0 0 6px rgba(12,156,111,.13)}
+.arrival-state.is-warning{background:#fff0ce;border-color:#fff0ce;color:#693e18}
+.arrival-name{font-size:clamp(32px,4.5vw,55px);margin:19px 0 10px}
+.arrival-opening{line-height:1.5;font-size:14px;font-weight:750}
+@media(max-width:760px){.arrival-title{font-size:clamp(25px,6.8vw,34px)}.arrival-state{width:100%;font-size:clamp(21px,6.4vw,29px);padding:14px 17px;min-height:67px}.arrival-name{font-size:clamp(31px,8.3vw,48px);margin:18px 0 10px}}
+@media(max-width:370px){.arrival-state{font-size:20px;padding:14px 12px;gap:11px}}

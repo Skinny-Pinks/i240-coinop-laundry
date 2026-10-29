@@ -53,7 +53,7 @@
   }
 
   function neutral(message) {
-    setState("Live status unavailable", "warning");
+    setState("STATUS UNAVAILABLE", "warning");
     setMain("Check before visiting", message ||
       "We can't confirm who's on duty right now. Call the store before bringing your laundry.", null);
     openingEl.textContent = "Opening and register status not currently available.";
@@ -65,20 +65,38 @@
     }
   }
 
-  function showOpening(opening) {
+  function minuteOfDay(value) {
+    const valid = safeTime(value);
+    if (!valid) return null;
+    const match = /^(\d{1,2}):(\d{2}) (AM|PM)$/.exec(valid);
+    if (!match) return null;
+    return (Number(match[1]) % 12) * 60 + Number(match[2]) + (match[3] === "PM" ? 720 : 0);
+  }
+
+  function showOpening(opening, shifts) {
     if (!opening || typeof opening !== "object") {
-      openingEl.textContent = "Morning register check-in not available.";
+      openingEl.textContent = "Morning register opening time not available.";
       return;
     }
     const time = safeTime(opening.recordedAt);
+    const am = Array.isArray(shifts) ? shifts.find(item => item?.shift === "AM") : null;
+    const scheduledTime = safeTime(am?.start) || "8:00 AM";
     if (opening.status === "register_checkin_recorded" && time) {
-      openingEl.textContent = "Morning register check-in recorded at " + time + ".";
+      const delay = minuteOfDay(time) - minuteOfDay(scheduledTime);
+      if (Number.isFinite(delay) && delay > 0) {
+        const duration = delay >= 60 ? Math.floor(delay / 60) + " hr" + (delay >= 120 ? "s" : "") +
+          (delay % 60 ? " " + (delay % 60) + " min" : "") : delay + " min";
+        openingEl.textContent = "Register opened today at " + time +
+          " · Scheduled opening " + scheduledTime + " · " + duration + " late.";
+      } else {
+        openingEl.textContent = "Register opened today at " + time + ".";
+      }
     } else if (opening.status === "not_confirmed") {
-      openingEl.textContent = "Morning register check-in has NOT been confirmed. Call before visiting.";
+      openingEl.textContent = "No register opening check-in confirmed. Call before visiting.";
     } else if (opening.status === "before_scheduled_open") {
-      openingEl.textContent = "Scheduled opening: 8:00 AM. Register check-in not yet confirmed.";
+      openingEl.textContent = "Scheduled opening: " + scheduledTime + " · No check-in yet.";
     } else {
-      openingEl.textContent = "Morning register check-in information unavailable.";
+      openingEl.textContent = "Morning register opening information unavailable.";
     }
   }
 
@@ -97,21 +115,20 @@
         statusEl.textContent = "Check-in not verified";
         continue;
       }
-      const name = safeName(row.scheduled);
-      nameEl.textContent = name || "Attendant not listed";
+      const scheduledName = safeName(row.scheduled);
+      nameEl.textContent = scheduledName || "Attendant not listed";
       const start = safeTime(row.start), end = safeTime(row.end);
       if (start && end) timeEl.textContent = start + " – " + end;
       const currentWorkers = Array.isArray(status.current?.attendants) ? status.current.attendants : [];
-      const worker = currentWorkers.find(item => item?.shift === shiftName);
-      const actualStart = safeTime(row.actualStart) ||
-        (row.attendance === "checked_in" ? safeTime(worker?.recordedStart) : null) ||
+      const worker = currentWorkers.find(item => item?.shift === shiftName && safeName(item?.name));
+      const actualStart = safeTime(worker?.recordedStart) || safeTime(row.actualStart) ||
         (shiftName === "AM" ? safeTime(status.opening?.recordedAt) : null);
       const departure = safeTime(row.confirmedDeparture) ||
         (status.lastDeparture?.shift === shiftName ? safeTime(status.lastDeparture.recordedAt) : null);
-      const isCurrentShift = currentWorkers.some(item => item?.shift === shiftName);
-      if (row.attendance === "checked_in" && status.status === "on_duty" && isCurrentShift) {
+      if (status.status === "on_duty" && worker) {
+        nameEl.textContent = safeName(worker.name);
         rowEl.classList.add("is-current");
-        statusEl.textContent = actualStart ? "Clock-in recorded: " + actualStart : "Check-in confirmed";
+        statusEl.textContent = actualStart ? "Here now · checked in at " + actualStart : "Here now · active register check-in";
       } else if (row.attendance === "checked_in") {
         statusEl.textContent = status.status === "outside_hours" ?
           "Register record still open; outside posted hours" :
@@ -127,12 +144,12 @@
 
   function showAttendance(data) {
     showShifts(data);
-    showOpening(data.opening);
+    showOpening(data.opening, data.todayShifts);
 
     const stamp = new Intl.DateTimeFormat("en-US", {
       hour: "numeric", minute: "2-digit", timeZone: "America/Chicago"
     }).format(new Date(data.checkedAt));
-    updatedEl.textContent = "Attendance last checked " + stamp + " Central · updates about every minute";
+    updatedEl.textContent = "Store status checked " + stamp + " Central · updates about every minute";
 
     const currentRows = Array.isArray(data.current?.attendants) ? data.current.attendants : [];
     const names = currentRows.map(row => safeName(row?.name)).filter(Boolean).slice(0, 4);
@@ -145,15 +162,14 @@
     const scheduled = start && end ? " Scheduled " + shift + " shift: " + start + "–" + end + "." : "";
 
     if (data.status === "on_duty" && names.length) {
-      setState("Register check-in confirmed", "live");
+      setState("OPEN FOR LAUNDRY", "live");
       setMain(
         names.length === 1 ? names[0] + " is here!" : names.join(" & ") + " are here!",
-        "Your " + (names.length === 1 ? "attendant has" : "attendants have") +
-          " a confirmed open register check-in." + scheduled,
+        "Come on in! An attendant is on duty and ready to help with your laundry." + scheduled,
         clockIn ? (names.length === 1 ? names[0] + " checked in at " : "First recorded check-in: ") + clockIn : null
       );
     } else if (data.status === "not_confirmed") {
-      setState("No current check-in confirmed", "warning");
+      setState("OPENING NOT CONFIRMED", "warning");
       const last = data.lastDeparture;
       const lastName = safeName(last?.name), outAt = safeTime(last?.recordedAt);
       if (lastName && outAt) {
@@ -164,7 +180,7 @@
           "An employee may be scheduled, but nobody has a confirmed active register check-in. Call before making the trip.", null);
       }
     } else if (data.status === "outside_hours") {
-      setState("Outside posted business hours", "warning");
+      setState("CLOSED FOR TODAY", "warning");
       const lastName = safeName(data.lastDeparture?.name);
       const departure = safeTime(data.lastDeparture?.recordedAt);
       if (lastName && departure) {
@@ -179,16 +195,30 @@
     }
   }
 
+  let lastConfirmedAt = null;
+  let requestId = 0;
+
+  function expireOldClaim() {
+    if (lastConfirmedAt !== null && Date.now() - lastConfirmedAt > MAX_AGE_MS) {
+      lastConfirmedAt = null;
+      neutral("The last check-in confirmation has expired. Call before visiting.");
+    }
+  }
+
   async function refresh() {
+    const thisRequest = ++requestId;
     const url = configuredUrl();
     if (!url) {
+      lastConfirmedAt = null;
       neutral("The live customer attendance feed hasn't been connected yet. Call the store for today's attendant.");
       return;
     }
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
     try {
       url.searchParams.set("v", String(Date.now()));
       const response = await fetch(url.toString(), {
-        method: "GET", mode: "cors", credentials: "omit", cache: "no-store"
+        method: "GET", mode: "cors", credentials: "omit", cache: "no-store", signal: controller.signal
       });
       if (!response.ok) throw new Error("unavailable");
       const data = await response.json();
@@ -201,15 +231,23 @@
       if (!Number.isFinite(checkedAt) || age < -120000 || age > MAX_AGE_MS) {
         throw new Error("stale_status");
       }
+      if (thisRequest !== requestId) return;
+      lastConfirmedAt = checkedAt;
       showAttendance(data);
     } catch (_error) {
-      neutral();
+      if (thisRequest === requestId) {
+        lastConfirmedAt = null;
+        neutral();
+      }
+    } finally {
+      clearTimeout(timeout);
     }
   }
 
   refresh();
   setInterval(refresh, REFRESH_MS);
+  setInterval(expireOldClaim, 5000);
   document.addEventListener("visibilitychange", function () {
-    if (!document.hidden) refresh();
+    if (!document.hidden) { expireOldClaim(); refresh(); }
   });
 })();
