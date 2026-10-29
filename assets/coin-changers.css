@@ -1,0 +1,29 @@
+/* Scoped addition only: existing attendance and marketing styles are untouched. */
+.coin-section {padding:38px 0 32px;background:#fbfaf6;border-bottom:1px solid #dce9e5}
+.coin-heading {display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:19px}
+.coin-heading h2 {font-size:clamp(28px,3vw,36px);margin:5px 0 0;line-height:1.12}
+.coin-eyebrow {font-size:10px;letter-spacing:.16em;font-weight:850;color:#08786f}
+.coin-refresh {appearance:none;cursor:pointer;flex:none;min-height:44px;border:1px solid #b9d2ca;border-radius:999px;background:#fff;color:#154b51;font:inherit;font-size:12px;font-weight:750;padding:9px 16px}
+.coin-refresh:hover {background:#ebf9f4}
+.coin-refresh:disabled {cursor:wait;opacity:.7}
+.coin-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.coin-card {border:1px solid #dce9e5;border-radius:17px;background:#fff;padding:21px 23px;min-width:0;position:relative}
+.coin-card-top {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.coin-card h3 {margin:0;font-size:20px;letter-spacing:-.04em;line-height:1.2}
+.coin-number {border:1px solid #d3e2dd;background:#f1f7f4;color:#23535b;border-radius:50%;min-width:41px;height:41px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:850}
+.coin-status {display:inline-flex;align-items:center;gap:8px;max-width:100%;border-radius:999px;padding:7px 12px;background:#f0f3f4;color:#4b6169;font-size:14px;font-weight:800;line-height:1.35}
+.coin-status::before {content:"";display:block;flex:none;width:7px;height:7px;border-radius:50%;background:currentColor}
+.coin-card[data-condition="good"] {border-color:#9dcdb8}
+.coin-card[data-condition="good"] .coin-status {color:#136643;background:#e6f5eb}
+.coin-card[data-condition="warning"] {border-color:#e2c788}
+.coin-card[data-condition="warning"] .coin-status {color:#80500e;background:#fff0ce}
+.coin-card[data-condition="bad"] {border-color:#deb0a5}
+.coin-card[data-condition="bad"] .coin-status {color:#943c30;background:#fdece6}
+.coin-card-note {margin:11px 0 0;color:#526e73;font-size:13px;line-height:1.5}
+.coin-summary {margin:17px 0 5px;color:#315b61;font-size:13px;font-weight:700;line-height:1.5}
+.coin-updated {margin:0 0 6px;font-size:11px;color:#526e73;line-height:1.5}
+.coin-caveat {font-size:11px;line-height:1.6;color:#526e73;margin:0;max-width:850px}
+.coin-caveat a {text-decoration:underline;text-underline-offset:3px;color:#154f58;font-weight:750;white-space:nowrap}
+.coin-noscript {font-size:13px;font-weight:700;color:#80500e}
+@media(max-width:600px){.coin-section{padding:27px 0}.coin-grid{grid-template-columns:1fr;gap:12px}.coin-card{padding:18px 20px}.coin-heading{gap:12px}.coin-heading h2{font-size:29px}.coin-refresh{padding:9px 12px;font-size:11px}.coin-card-top{margin-bottom:12px}}
+@media(prefers-reduced-motion:reduce){.coin-section *{scroll-behavior:auto}}
