@@ -11,9 +11,11 @@
   <title>I-240 Coin-Op Laundry | Wash Here. Dry Free.</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/coin-changers.css">
   <script src="site-config.js" defer></script>
   <script src="assets/site.js" defer></script>
   <script src="assets/attendant.js" defer></script>
+  <script src="assets/coin-changers.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -74,6 +76,31 @@
           </div>
           <p class="arrival-schedule-note">Scheduled hours are not a confirmation that an employee has arrived. Recorded check-ins and clock-outs are shown when verified.</p>
         </aside>
+      </div>
+    </section>
+
+    <section id="coin-changers" class="coin-section" aria-labelledby="coin-title">
+      <div class="container">
+        <div class="coin-heading">
+          <div><span class="coin-eyebrow">MACHINE STATUS</span><h2 id="coin-title">Coin changers</h2></div>
+          <button id="coin-refresh" class="coin-refresh" type="button">Refresh status</button>
+        </div>
+        <div class="coin-grid">
+          <article id="coin-card-1" class="coin-card" data-condition="unknown" aria-labelledby="coin-name-1">
+            <div class="coin-card-top"><h3 id="coin-name-1">Left coin changer</h3><span class="coin-number" aria-label="Machine number 1">#1</span></div>
+            <span id="coin-status-1" class="coin-status">Status unavailable</span>
+            <p id="coin-note-1" class="coin-card-note">Checking recorded machine condition…</p>
+          </article>
+          <article id="coin-card-4" class="coin-card" data-condition="unknown" aria-labelledby="coin-name-4">
+            <div class="coin-card-top"><h3 id="coin-name-4">Right coin changer</h3><span class="coin-number" aria-label="Machine number 4">#4</span></div>
+            <span id="coin-status-4" class="coin-status">Status unavailable</span>
+            <p id="coin-note-4" class="coin-card-note">Checking recorded machine condition…</p>
+          </article>
+        </div>
+        <p id="coin-summary" class="coin-summary" role="status" aria-live="polite">Checking the latest CoinOp records…</p>
+        <p id="coin-updated" class="coin-updated"></p>
+        <p class="coin-caveat">Recorded equipment condition, not a live quarter count. Updates may be delayed by synchronization. Need help? <a href="tel:+14056310466">Call 405-631-0466</a>.</p>
+        <noscript><p class="coin-noscript">Enable JavaScript for recorded machine status, or call the store.</p></noscript>
       </div>
     </section>
 

@@ -38,8 +38,8 @@ window.COINOP_SITE = {
     { title: "Quadruple loader", loadLabel: "4 LOADS", price: 11.25 }
   ],
   freeDryingWhenYouWashHere: true,
-  // Reserved for Phase 2: a PUBLIC, sanitized data feed — NOT the private employee website URL.
-  publicMachineStatusUrl: "",
+  // Approved changer conditions from the existing customer-only service.
+  publicMachineStatusUrl: "https://i240status.mccrarytechnology.com/v1/i240/coin-changers",
   // Dedicated, sanitized attendant status URL (HTTPS only, not the employee portal).
   // Verified independent customer-only HTTPS status service.
   // This is NOT the private employee portal or the full schedule API.
